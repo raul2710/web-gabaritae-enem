@@ -1,9 +1,20 @@
 'use client';
 
-import { BookOpen, CalendarCheck, ClipboardList, Home, type LucideIcon, User } from 'lucide-react';
+import {
+  BookOpen,
+  CalendarCheck,
+  ClipboardList,
+  Home,
+  type LucideIcon,
+  Menu,
+  PanelLeftClose,
+  PanelLeftOpen,
+  User,
+  X,
+} from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 
 import { LogoutButton } from './LogoutButton';
 import { Avatar } from '@/components/ui/Avatar';
@@ -24,7 +35,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: '/app/perfil', label: 'Perfil', icon: User },
 ];
 
-/** Bottom nav no mobile: 4 destinos principais (Simulados fica na sidebar/topbar). */
+/** Bottom nav no mobile: 4 destinos principais. */
 const BOTTOM_NAV_ITEMS = NAV_ITEMS.filter((item) => item.href !== '/app/simulados');
 
 /** Exato para `/app`; por prefixo para as demais rotas. */
@@ -44,11 +55,58 @@ interface AppShellProps {
 
 export function AppShell({ user, children }: AppShellProps) {
   const pathname = usePathname();
+  const [collapsed, setCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const shellClassName = [
+    'app-shell',
+    collapsed ? 'app-shell--collapsed' : '',
+    mobileMenuOpen ? 'app-shell--drawer-open' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
-    <div className="app-shell">
-      <aside className="sidebar" aria-label="Navegação da área do aluno">
-        <Logo href="/app" />
+    <div className={shellClassName}>
+      {mobileMenuOpen ? (
+        <div
+          className="sidebar-backdrop"
+          aria-hidden="true"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      ) : null}
+
+      <aside
+        id="app-sidebar"
+        className={collapsed ? 'sidebar sidebar--collapsed' : 'sidebar'}
+        aria-label="Navegação da área do aluno"
+      >
+        <div className="sidebar__header">
+          <Logo href="/app" compact={collapsed} />
+
+          <button
+            type="button"
+            className="sidebar__toggle sidebar__toggle--desktop"
+            onClick={() => setCollapsed((prev) => !prev)}
+            aria-label={collapsed ? 'Expandir menu lateral' : 'Recolher menu lateral'}
+            title={collapsed ? 'Expandir menu lateral' : 'Recolher menu lateral'}
+          >
+            {collapsed ? (
+              <PanelLeftOpen size={18} aria-hidden="true" />
+            ) : (
+              <PanelLeftClose size={18} aria-hidden="true" />
+            )}
+          </button>
+
+          <button
+            type="button"
+            className="sidebar__toggle sidebar__toggle--mobile"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-label="Fechar menu"
+          >
+            <X size={18} aria-hidden="true" />
+          </button>
+        </div>
 
         <nav className="sidebar__nav" aria-label="Seções da área do aluno">
           {NAV_ITEMS.map((item) => {
@@ -59,29 +117,46 @@ export function AppShell({ user, children }: AppShellProps) {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() => setMobileMenuOpen(false)}
                 className={active ? 'sidebar__link sidebar__link--active' : 'sidebar__link'}
                 aria-current={active ? 'page' : undefined}
+                title={collapsed ? item.label : undefined}
               >
                 <Icon size={18} aria-hidden="true" />
-                {item.label}
+                <span className="sidebar__link-label">{item.label}</span>
               </Link>
             );
           })}
         </nav>
 
         <div className="sidebar__footer">
-          <div className="sidebar__user">
+          <Link
+            href="/app/perfil"
+            onClick={() => setMobileMenuOpen(false)}
+            className="sidebar__user"
+            title={collapsed ? `${user.name} (${user.email})` : undefined}
+          >
             <Avatar name={user.name} />
             <span className="sidebar__user-info">
               <span className="sidebar__user-name">{user.name}</span>
               <span className="sidebar__user-email">{user.email}</span>
             </span>
-          </div>
-          <LogoutButton />
+          </Link>
+          <LogoutButton compact={collapsed} />
         </div>
       </aside>
 
       <header className="app-topbar">
+        <button
+          type="button"
+          className="app-topbar__menu-btn"
+          onClick={() => setMobileMenuOpen(true)}
+          aria-label="Abrir menu lateral"
+          aria-expanded={mobileMenuOpen}
+          aria-controls="app-sidebar"
+        >
+          <Menu size={20} aria-hidden="true" />
+        </button>
         <Logo href="/app" />
         <span className="app-topbar__name">{firstName(user.name)}</span>
         <LogoutButton>Sair</LogoutButton>

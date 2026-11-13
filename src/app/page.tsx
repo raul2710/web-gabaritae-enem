@@ -23,6 +23,7 @@ import { SectionHeader } from '@/components/ui/SectionHeader';
 import { officialExams, questions } from '@/data/catalog';
 import { ENEM_DISCIPLINES } from '@/domain/constants';
 import type { BookletColor, OfficialExam } from '@/domain/types';
+import { getSession } from '@/lib/auth';
 import { countExamQuestions } from '@/lib/exams';
 
 const AREA_ICONS = {
@@ -76,8 +77,9 @@ function getFeaturedExams(): OfficialExam[] {
   return featured.length > 0 ? featured : officialExams.slice(0, 3);
 }
 
-export default function Home() {
+export default async function Home() {
   const featuredExams = getFeaturedExams();
+  const user = await getSession();
 
   return (
     <>
@@ -103,13 +105,19 @@ export default function Home() {
                 </p>
 
                 <div className="hero__actions">
-                  <Button href="/provas">
+                  <Button href={user ? '/app/provas' : '/provas'}>
                     Ver provas
                     <ArrowRight size={16} aria-hidden="true" />
                   </Button>
-                  <Button href="/criar-conta" variant="secondary">
-                    Criar conta
-                  </Button>
+                  {user ? (
+                    <Button href="/app" variant="secondary">
+                      Ir para meu painel
+                    </Button>
+                  ) : (
+                    <Button href="/criar-conta" variant="secondary">
+                      Criar conta
+                    </Button>
+                  )}
                 </div>
 
                 <p className="hero__note">
@@ -209,7 +217,7 @@ export default function Home() {
               title="Comece por um caderno oficial"
               description="Os cadernos mais recentes do ENEM, com as questões das quatro áreas já separadas por caderno."
               action={
-                <Button href="/provas" variant="ghost" size="sm">
+                <Button href={user ? '/app/provas' : '/provas'} variant="ghost" size="sm">
                   Ver todas as provas
                   <ArrowRight size={16} aria-hidden="true" />
                 </Button>
@@ -222,6 +230,7 @@ export default function Home() {
                   key={exam.id}
                   exam={exam}
                   questionCount={countExamQuestions(questions, exam)}
+                  href={user ? `/app/provas/${exam.id}` : `/provas/${exam.id}`}
                 />
               ))}
             </div>
@@ -240,11 +249,14 @@ export default function Home() {
             <div className="grid-4">
               {ENEM_DISCIPLINES.map((area) => {
                 const Icon = AREA_ICONS[area.id];
+                const areaHref = user
+                  ? `/app/estudar/${area.id}`
+                  : `/entrar?next=${encodeURIComponent(`/app/estudar/${area.id}`)}`;
 
                 return (
                   <Link
                     key={area.id}
-                    href={`/provas?disciplina=${area.id}`}
+                    href={areaHref}
                     className="area-card"
                     style={
                       {
@@ -253,11 +265,12 @@ export default function Home() {
                       } as CSSProperties
                     }
                   >
-                    <span className="area-card__icon">
-                      <Icon size={20} aria-hidden="true" />
-                    </span>
-                    <span className="area-card__code">{area.code}</span>
-                    <h3 className="area-card__title">{area.name}</h3>
+                    <div className="area-card__header">
+                      <span className="area-card__icon">
+                        <Icon size={20} aria-hidden="true" />
+                      </span>
+                      <h3 className="area-card__title">{area.name}</h3>
+                    </div>
                     <p className="area-card__description">{area.shortDesc}</p>
                     <span
                       className="row"
@@ -268,7 +281,7 @@ export default function Home() {
                         fontSize: 'var(--text-meta)',
                       }}
                     >
-                      Ver questões
+                      Estudar conteúdo
                       <ArrowRight size={14} aria-hidden="true" />
                     </span>
                   </Link>
@@ -291,11 +304,11 @@ export default function Home() {
               </div>
 
               <div className="row">
-                <Button href="/criar-conta">
-                  Criar conta
+                <Button href={user ? '/app' : '/criar-conta'}>
+                  {user ? 'Abrir meu painel' : 'Criar conta'}
                   <ArrowRight size={16} aria-hidden="true" />
                 </Button>
-                <Button href="/provas" variant="secondary">
+                <Button href={user ? '/app/provas' : '/provas'} variant="secondary">
                   Ver provas
                 </Button>
               </div>

@@ -167,3 +167,13 @@ export function getSubjectPerformance(attempts: AnswerAttempt[]): SubjectPerform
     };
   });
 }
+
+/**
+ * Estima a pontuação na escala do ENEM (400 a 960 pontos) a partir da precisão
+ * nas questões respondidas. Retorna `0` quando ainda não há tentativas.
+ */
+export function estimateEnemScore(accuracyRate: number, uniqueQuestions: number): number {
+  if (uniqueQuestions <= 0) return 0;
+  const clampedRate = Math.min(100, Math.max(0, accuracyRate));
+  return Math.round(400 + (clampedRate / 100) * 560);
+}

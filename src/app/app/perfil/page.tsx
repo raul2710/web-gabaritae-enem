@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { ArrowRight, Repeat } from 'lucide-react';
 
+import { StudyGoalCard } from '@/components/dashboard/StudyGoalCard';
 import { LogoutButton } from '@/components/layout/LogoutButton';
 import { Avatar } from '@/components/ui/Avatar';
 import { getSession } from '@/lib/auth';
@@ -25,6 +26,10 @@ export default async function AppPerfilPage() {
           no navegador.
         </p>
       </header>
+
+      <div style={{ marginTop: 'var(--space-lg)', maxWidth: '720px' }}>
+        <StudyGoalCard userId={user.id} />
+      </div>
 
       <div className="card" style={{ marginTop: 'var(--space-lg)', maxWidth: '560px' }}>
         <div className="row">

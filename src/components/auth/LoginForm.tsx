@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
 
+import { GoogleAuthButton } from '@/components/auth/GoogleAuthButton';
+
 interface LoginFormProps {
   /** Caminho validado no server component para onde a sessão deve ir. */
   nextPath: string;
@@ -29,10 +31,13 @@ export function LoginForm({ nextPath, isMockMode = false }: LoginFormProps) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<ErrorState>(null);
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+
+  const isBusy = loading || googleLoading;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (loading) return;
+    if (isBusy) return;
     setError(null);
 
     const trimmedEmail = email.trim().toLowerCase();
@@ -87,6 +92,18 @@ export function LoginForm({ nextPath, isMockMode = false }: LoginFormProps) {
         </p>
       ) : null}
 
+      <GoogleAuthButton
+        nextPath={nextPath}
+        label="Entrar com o Google"
+        disabled={loading}
+        onLoadingChange={setGoogleLoading}
+        onError={(message) => setError(message ? { message } : null)}
+      />
+
+      <div className="auth-divider" role="separator" aria-label="ou use seu e-mail">
+        <span>ou continue com seu e-mail</span>
+      </div>
+
       <div className="field">
         <label className="field-label" htmlFor="login-email">
           E-mail
@@ -102,7 +119,7 @@ export function LoginForm({ nextPath, isMockMode = false }: LoginFormProps) {
           autoComplete="email"
           inputMode="email"
           required
-          disabled={loading}
+          disabled={isBusy}
           aria-invalid={emailInvalid || undefined}
           aria-describedby={emailInvalid ? 'login-email-error' : undefined}
         />
@@ -127,7 +144,7 @@ export function LoginForm({ nextPath, isMockMode = false }: LoginFormProps) {
           placeholder="••••••••"
           autoComplete="current-password"
           required
-          disabled={loading}
+          disabled={isBusy}
           aria-invalid={passwordInvalid || undefined}
           aria-describedby={passwordInvalid ? 'login-password-error' : undefined}
         />
@@ -138,7 +155,7 @@ export function LoginForm({ nextPath, isMockMode = false }: LoginFormProps) {
         ) : null}
       </div>
 
-      <button type="submit" className="btn btn--primary btn--block" disabled={loading}>
+      <button type="submit" className="btn btn--primary btn--block" disabled={isBusy}>
         {loading ? 'Entrando...' : 'Entrar'}
       </button>
 

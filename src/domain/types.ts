@@ -100,3 +100,15 @@ export interface StudyStats {
   /** 0–100, limitado a 100. */
   dailyGoalRate: number;
 }
+
+/** Objetivo do aluno para o ENEM (curso/foco, universidade e nota de corte alvo). */
+export interface StudyGoal {
+  /** Curso ou área de foco (ex.: Medicina, Engenharia de Software, Direito). */
+  focusCourse: string;
+  /** Universidade desejada (ex.: USP, UNICAMP, UFMG, UFRJ). */
+  targetUniversity: string;
+  /** Nota alvo no ENEM (escala TRI: 400 a 1000). */
+  targetScore: number;
+  /** ISO 8601 da última atualização. */
+  updatedAt: string;
+}

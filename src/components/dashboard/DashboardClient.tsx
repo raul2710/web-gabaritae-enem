@@ -9,6 +9,7 @@ import { Card } from '@/components/ui/Card';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { SectionHeader } from '@/components/ui/SectionHeader';
+import { StudyGoalCard } from '@/components/dashboard/StudyGoalCard';
 import { questions as catalogQuestions } from '@/data/catalog';
 import { ENEM_DISCIPLINES } from '@/domain/constants';
 import {
@@ -135,6 +136,8 @@ export function DashboardClient({ user }: DashboardClientProps) {
         <DashboardSkeleton />
       ) : (
         <>
+          <StudyGoalCard userId={user.id} />
+
           <div className="kpi-grid">
             <div className="kpi">
               <span className="kpi__value">{stats.accuracyRate}%</span>

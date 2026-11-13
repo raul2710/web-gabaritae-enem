@@ -10,6 +10,7 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { officialExams, questions } from '@/data/catalog';
 import { ENEM_DISCIPLINES } from '@/domain/constants';
+import { getSession } from '@/lib/auth';
 import {
   EXAM_BOOKLET_COLORS,
   EXAM_DISCIPLINES,
@@ -97,6 +98,7 @@ interface ProvasPageProps {
 export default async function ProvasPage({ searchParams }: ProvasPageProps) {
   const params = await searchParams;
   const filters = normalizeFilters(params);
+  const user = await getSession();
 
   const results = filterExams(officialExams, questions, filters);
   const filtered = hasActiveFilters(filters);
@@ -225,6 +227,7 @@ export default async function ProvasPage({ searchParams }: ProvasPageProps) {
                     key={exam.id}
                     exam={exam}
                     questionCount={countExamQuestions(questions, exam)}
+                    href={user ? `/app/provas/${exam.id}` : `/provas/${exam.id}`}
                   />
                 ))}
               </div>

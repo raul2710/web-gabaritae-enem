@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
 
+import { GoogleAuthButton } from '@/components/auth/GoogleAuthButton';
+
 interface RegisterFormProps {
   /** Caminho validado no server component para onde a sessão deve ir. */
   nextPath: string;
@@ -33,10 +35,13 @@ export function RegisterForm({ nextPath, isMockMode = false }: RegisterFormProps
   const [confirm, setConfirm] = useState('');
   const [error, setError] = useState<ErrorState>(null);
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+
+  const isBusy = loading || googleLoading;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (loading) return;
+    if (isBusy) return;
     setError(null);
 
     const trimmedName = name.trim();
@@ -115,6 +120,18 @@ export function RegisterForm({ nextPath, isMockMode = false }: RegisterFormProps
         </p>
       ) : null}
 
+      <GoogleAuthButton
+        nextPath={nextPath}
+        label="Cadastrar com o Google"
+        disabled={loading}
+        onLoadingChange={setGoogleLoading}
+        onError={(message) => setError(message ? { message } : null)}
+      />
+
+      <div className="auth-divider" role="separator" aria-label="ou preencha seus dados">
+        <span>ou crie com seu e-mail</span>
+      </div>
+
       <div className="field">
         <label className="field-label" htmlFor="register-name">
           Nome
@@ -129,7 +146,7 @@ export function RegisterForm({ nextPath, isMockMode = false }: RegisterFormProps
           placeholder="Como quer ser chamado(a)"
           autoComplete="name"
           required
-          disabled={loading}
+          disabled={isBusy}
           aria-invalid={Boolean(invalid('name')) || undefined}
           aria-describedby={invalid('name') ? 'register-name-error' : undefined}
         />
@@ -151,7 +168,7 @@ export function RegisterForm({ nextPath, isMockMode = false }: RegisterFormProps
           autoComplete="email"
           inputMode="email"
           required
-          disabled={loading}
+          disabled={isBusy}
           aria-invalid={Boolean(invalid('email')) || undefined}
           aria-describedby={invalid('email') ? 'register-email-error' : undefined}
         />
@@ -172,7 +189,7 @@ export function RegisterForm({ nextPath, isMockMode = false }: RegisterFormProps
           placeholder="Mínimo de 6 caracteres"
           autoComplete="new-password"
           required
-          disabled={loading}
+          disabled={isBusy}
           aria-invalid={Boolean(invalid('password')) || undefined}
           aria-describedby={
             invalid('password')
@@ -200,14 +217,14 @@ export function RegisterForm({ nextPath, isMockMode = false }: RegisterFormProps
           placeholder="Digite a senha novamente"
           autoComplete="new-password"
           required
-          disabled={loading}
+          disabled={isBusy}
           aria-invalid={Boolean(invalid('confirm')) || undefined}
           aria-describedby={invalid('confirm') ? 'register-confirm-error' : undefined}
         />
         {fieldError('confirm')}
       </div>
 
-      <button type="submit" className="btn btn--primary btn--block" disabled={loading}>
+      <button type="submit" className="btn btn--primary btn--block" disabled={isBusy}>
         {loading ? 'Criando conta...' : 'Criar conta'}
       </button>
 

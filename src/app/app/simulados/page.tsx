@@ -45,7 +45,7 @@ export default function AppSimuladosPage() {
         </p>
 
         <div className="row" style={{ marginTop: 'var(--space-md)' }}>
-          <Link href="/provas" className="btn btn--primary">
+          <Link href="/app/provas" className="btn btn--primary">
             Treinar com provas oficiais
             <ArrowRight size={16} aria-hidden="true" />
           </Link>

@@ -28,11 +28,6 @@ export default function AppEstudarPage() {
         </p>
       </header>
 
-      <p className="editorial-note" style={{ marginTop: 'var(--space-md)' }}>
-        Os módulos de teoria detalhados por área entram na próxima fase. Por enquanto, cada área
-        leva ao resumo da disciplina e às provas que mais cobram esses temas.
-      </p>
-
       <div className="grid-4" style={{ marginTop: 'var(--space-lg)' }}>
         {ENEM_DISCIPLINES.map((area) => {
           const Icon = AREA_ICONS[area.id];
@@ -49,11 +44,12 @@ export default function AppEstudarPage() {
                 } as CSSProperties
               }
             >
-              <span className="area-card__icon">
-                <Icon size={20} aria-hidden="true" />
-              </span>
-              <span className="area-card__code">{area.code}</span>
-              <h2 className="area-card__title">{area.name}</h2>
+              <div className="area-card__header">
+                <span className="area-card__icon">
+                  <Icon size={20} aria-hidden="true" />
+                </span>
+                <h2 className="area-card__title">{area.name}</h2>
+              </div>
               <p className="area-card__description">{area.shortDesc}</p>
               <span
                 className="row"
@@ -64,7 +60,7 @@ export default function AppEstudarPage() {
                   fontSize: 'var(--text-meta)',
                 }}
               >
-                Abrir área
+                Estudar apostilas
                 <ArrowRight size={14} aria-hidden="true" />
               </span>
             </Link>
