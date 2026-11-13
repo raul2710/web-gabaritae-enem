@@ -6,6 +6,7 @@ import {
   deriveNameFromEmail,
   encodeSession,
   extractSessionUser,
+  getDefaultAvatarUrl,
   isValidEmail,
   sessionCookieOptions,
 } from '@/lib/auth';
@@ -84,10 +85,12 @@ export async function POST(request: Request): Promise<NextResponse> {
     return errorResponse('A senha precisa ter ao menos 6 caracteres.', 400);
   }
 
+  const name = deriveNameFromEmail(email);
   const user: SessionUser = {
     id: `mock:${email}`,
-    name: deriveNameFromEmail(email),
+    name,
     email,
+    avatarUrl: getDefaultAvatarUrl(name, email),
   };
 
   return sessionResponse(user);

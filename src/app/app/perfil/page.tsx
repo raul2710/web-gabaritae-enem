@@ -33,7 +33,7 @@ export default async function AppPerfilPage() {
 
       <div className="card" style={{ marginTop: 'var(--space-lg)', maxWidth: '560px' }}>
         <div className="row">
-          <Avatar name={user.name} size="lg" />
+          <Avatar name={user.name} image={user.avatarUrl} size="lg" />
           <div>
             <p style={{ fontWeight: 600 }}>{user.name}</p>
             <p className="meta">{user.email}</p>

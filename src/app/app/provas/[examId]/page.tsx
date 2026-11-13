@@ -43,19 +43,19 @@ export default async function AppExamPage({ params }: AppExamPageProps) {
     redirect(`/entrar?next=${encodeURIComponent(`/app/provas/${examId}`)}`);
   }
 
-  const examList = await getAllExams();
+  const [examList, examQuestions] = await Promise.all([
+    getAllExams(),
+    getExamQuestions(examId),
+  ]);
   let exam = findExam(examList, examId) ?? findExam(officialExams, examId);
-  let questions: Question[] = [];
+  let questions: Question[] = examQuestions;
 
-  if (exam) {
-    questions = await getExamQuestions(examId);
-  } else {
+  if (!exam) {
     // Prova fora do catálogo local: só renderiza se o id for derivável.
     const derived = deriveExamFromId(examId);
     if (!derived) notFound();
 
-    const candidate = await getExamQuestions(examId);
-    questions = candidate.filter(
+    questions = examQuestions.filter(
       (question) =>
         question.year === derived.year && question.bookletColor === derived.bookletColor,
     );

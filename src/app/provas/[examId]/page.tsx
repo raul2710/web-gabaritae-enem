@@ -63,20 +63,20 @@ export async function generateMetadata({ params }: ExamPageProps): Promise<Metad
 export default async function ExamPage({ params }: ExamPageProps) {
   const { examId } = await params;
 
-  const examList = await getAllExams();
+  const [examList, examQuestions] = await Promise.all([
+    getAllExams(),
+    getExamQuestions(examId),
+  ]);
   let exam = findExam(examList, examId) ?? findExam(officialExams, examId);
-  let questions: Question[] = [];
+  let questions: Question[] = examQuestions;
 
-  if (exam) {
-    questions = await getExamQuestions(examId);
-  } else {
+  if (!exam) {
     // A prova não está em nenhuma lista: só renderiza se a API trouxer
     // questões para um id no padrão `prova-<ano>-<cor>`.
     const derived = deriveExamFromId(examId);
     if (!derived) notFound();
 
-    const candidate = await getExamQuestions(examId);
-    questions = candidate.filter(
+    questions = examQuestions.filter(
       (question) =>
         question.year === derived.year && question.bookletColor === derived.bookletColor,
     );

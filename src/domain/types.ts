@@ -35,16 +35,17 @@ export interface Question {
 export interface TheorySection {
   heading: string;
   body: string;
+  imageUrl?: string;
 }
 
-/** "Pegadinha clássica" destacada nos módulos de teoria. */
+/** "Pegadinha clássica" destacada nos módulos de teoria e apostilas. */
 export interface EnemTrap {
   title: string;
   wrongThinking: string;
   correctThinking: string;
-  quickQuestion: string;
-  options: string[];
-  correctOptionIndex: number;
+  quickQuestion?: string;
+  options?: string[];
+  correctOptionIndex?: number;
 }
 
 export interface TheoryModule {
@@ -62,6 +63,117 @@ export interface TheoryModule {
   sections: TheorySection[];
 }
 
+/** Apostila dinâmica no contrato da API REST. */
+export type Apostila = TheoryModule;
+
+/** Áreas formais do ENEM segundo a matriz de referência do Inep. */
+export type AreaEnem =
+  | 'Matemática'
+  | 'Ciências da Natureza'
+  | 'Ciências Humanas'
+  | 'Linguagens';
+
+/** Classificação de recorrência estatística da habilidade no ENEM. */
+export type RecorrenciaEnem = 'Alta' | 'Média' | 'Baixa';
+
+export interface ElementoVisualOriginal {
+  urlImagem: string;
+  altTextAnalitico: string;
+}
+
+export interface RoteiroEstrutural {
+  elementoCentral: string;
+  fluxosERelacoes: string;
+  legendaExplicativa: string;
+}
+
+export interface EsquemaConceitual {
+  objetivoPedagogico: string;
+  promptIngles: string;
+  promptPortugues: string;
+  roteiroEstrutural: RoteiroEstrutural;
+}
+
+export interface ItemFixacao {
+  referencia: string;
+  ano: number;
+  aplicacao: string;
+  corCaderno: string;
+  numeroQuestao: number;
+  enunciado: string;
+  alternativas: string[];
+  gabaritoOficial: AlternativeLetter;
+  resolucaoComentada: string;
+}
+
+/** Módulo Didático Curado (Padrão Inep + Google NotebookLM). */
+export interface ModuloDidatico {
+  id: string;
+  tituloTematico: string;
+  area: AreaEnem;
+  disciplina: string;
+  competencia: string;
+  habilidade: string;
+  recorrencia: RecorrenciaEnem;
+  fontesCanonicas: string[];
+  fundamentacaoTeorica: string;
+  elementoVisualOriginal: ElementoVisualOriginal;
+  esquemaConceitual: EsquemaConceitual;
+  comoCostumaCair: string;
+  distratoresComuns: string;
+  itemFixacao: ItemFixacao;
+  apostilaId: string | null;
+  questionId: string | null;
+}
+
+export interface PixInfo {
+  pixKey: string;
+  keyType: string;
+  merchantName: string;
+  merchantCity: string;
+  amount?: number;
+  txId: string;
+  pixCopiaECola: string;
+}
+
+export interface OfflinePack {
+  id: string;
+  discipline: DisciplineId;
+  theory: Apostila[];
+  questions: Question[];
+  modulosDidaticos: ModuloDidatico[];
+  pix: PixInfo;
+  sizeKb: number;
+}
+
+export interface ModulosResponse {
+  count: number;
+  modulos: ModuloDidatico[];
+}
+
+export interface ModuloDetailResponse {
+  modulo: ModuloDidatico;
+  notebookLmMarkdown: string;
+}
+
+export interface ApostilaDetailResponse {
+  apostila: Apostila;
+  relatedQuestions: Question[];
+}
+
+export interface QuestionsResponse {
+  count: number;
+  questions: Question[];
+}
+
+export interface ImportResult {
+  success: boolean;
+  message: string;
+  id?: string;
+  rejectedUrls?: string[];
+  errors?: string[];
+}
+
 export interface OfficialExam {
   id: string;
   year: number;
@@ -75,6 +187,7 @@ export interface SessionUser {
   id: string;
   name: string;
   email: string;
+  avatarUrl?: string;
 }
 
 export interface AnswerAttempt {

@@ -39,10 +39,17 @@ export function decodeSession(raw: string | undefined | null): SessionUser | nul
     const candidate = parsed as Partial<SessionUser>;
     if (!candidate.id || !candidate.email) return null;
 
+    const email = String(candidate.email);
+    const name = String(candidate.name ?? '');
+    const avatarUrl = candidate.avatarUrl
+      ? String(candidate.avatarUrl)
+      : getDefaultAvatarUrl(name, email);
+
     return {
       id: String(candidate.id),
-      name: String(candidate.name ?? ''),
-      email: String(candidate.email),
+      name,
+      email,
+      avatarUrl,
     };
   } catch {
     return null;
@@ -91,6 +98,12 @@ export function isValidEmail(value: string): boolean {
   return EMAIL_PATTERN.test(value);
 }
 
+/** Deriva um avatar SVG de alta qualidade e determinístico caso não haja foto definida. */
+export function getDefaultAvatarUrl(name: string, email: string): string {
+  const seed = encodeURIComponent((name || email || 'estudante').trim());
+  return `https://api.dicebear.com/7.x/lorelei/svg?seed=${seed}&backgroundColor=e4f2f0,b3dbd6`;
+}
+
 /** Deriva um nome de exibição a partir do e-mail (`maria.souza@x.com` → `Maria Souza`). */
 export function deriveNameFromEmail(email: string): string {
   const local = email.split('@')[0] ?? '';
@@ -124,5 +137,17 @@ export function extractSessionUser(payload: unknown): SessionUser | null {
   const id = String(rawUser.id ?? rawUser.userId ?? record.id ?? email);
   const name = String(rawUser.name ?? rawUser.nome ?? deriveNameFromEmail(email));
 
-  return { id, name, email };
+  const rawAvatar =
+    rawUser.avatarUrl ??
+    rawUser.avatar ??
+    rawUser.picture ??
+    rawUser.photo ??
+    rawUser.foto;
+
+  const avatarUrl =
+    typeof rawAvatar === 'string' && rawAvatar.trim()
+      ? rawAvatar.trim()
+      : getDefaultAvatarUrl(name, email);
+
+  return { id, name, email, avatarUrl };
 }

@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
-import { Avatar } from '@/components/ui/Avatar';
 import { Logo } from '@/components/ui/Logo';
-import { LogoutButton } from '@/components/layout/LogoutButton';
+import { UserMenu } from '@/components/layout/UserMenu';
+import { PixButton } from '@/components/pix/PixButton';
 import { getSession } from '@/lib/auth';
 
 const PUBLIC_NAV_LINKS = [
@@ -36,16 +36,16 @@ export async function PublicHeader() {
         </nav>
 
         <div className="public-header__actions">
+          <PixButton variant="pill" label="Apoiar com Pix" />
           {user ? (
             <>
-              <Link href="/app/perfil" className="public-header__user" title="Abrir perfil">
-                <Avatar name={user.name} />
-                <span className="public-header__user-name">{user.name}</span>
-              </Link>
-              <Link href="/app" className="btn btn--primary btn--sm">
+              <Link
+                href="/app"
+                className="btn btn--primary btn--sm public-header__app-btn"
+              >
                 Área do aluno
               </Link>
-              <LogoutButton />
+              <UserMenu user={user} showAppDashboardLink />
             </>
           ) : (
             <>

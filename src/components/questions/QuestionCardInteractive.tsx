@@ -6,6 +6,8 @@ import { useEffect, useRef } from 'react';
 
 import { bookletTone } from '@/components/exams/ExamCard';
 import { Badge } from '@/components/ui/Badge';
+import { MathMarkdown } from '@/components/ui/MathMarkdown';
+import { SmartMediaViewer } from '@/components/ui/SmartMediaViewer';
 import type { AlternativeLetter, Question } from '@/domain/types';
 
 const LETTERS: AlternativeLetter[] = ['A', 'B', 'C', 'D', 'E'];
@@ -72,12 +74,16 @@ export function QuestionCardInteractive({
         <Badge tone={bookletTone(question.bookletColor)}>Caderno {question.bookletColor}</Badge>
       </div>
 
-      <p className="question-card__statement">{question.title}</p>
+      <div className="question-card__statement">
+        <MathMarkdown content={question.title} />
+      </div>
 
       {question.imageUrl ? (
-        <figure className="question-card__figure">
-          <img src={question.imageUrl} alt={`Ilustração da questão sobre ${question.topic}`} />
-        </figure>
+        <SmartMediaViewer
+          url={question.imageUrl}
+          altText={`Ilustração da questão sobre ${question.topic}`}
+          className="question-card__figure"
+        />
       ) : null}
 
       <ol className="alternatives">
@@ -108,7 +114,9 @@ export function QuestionCardInteractive({
                 <span className="alternative__letter" aria-hidden="true">
                   {letter}
                 </span>
-                <span>{text}</span>
+                <span className="alternative__text">
+                  <MathMarkdown content={text} />
+                </span>
               </button>
             </li>
           );
@@ -124,7 +132,9 @@ export function QuestionCardInteractive({
               Resposta correta: <strong>{question.correctAlternative}</strong>
             </p>
           )}
-          <p className="answer-explanation">{question.explanation}</p>
+          <div className="answer-explanation">
+            <MathMarkdown content={question.explanation} />
+          </div>
         </div>
       ) : null}
 

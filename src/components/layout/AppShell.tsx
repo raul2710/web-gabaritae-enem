@@ -4,6 +4,7 @@ import {
   BookOpen,
   CalendarCheck,
   ClipboardList,
+  Heart,
   Home,
   type LucideIcon,
   Menu,
@@ -14,9 +15,11 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 
 import { LogoutButton } from './LogoutButton';
+import { UserMenu } from './UserMenu';
+import { PixButton } from '@/components/pix/PixButton';
 import { Avatar } from '@/components/ui/Avatar';
 import { Logo } from '@/components/ui/Logo';
 import type { SessionUser } from '@/domain/types';
@@ -44,10 +47,6 @@ function isActivePath(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-function firstName(name: string): string {
-  return name.trim().split(/\s+/)[0] ?? '';
-}
-
 interface AppShellProps {
   user: SessionUser;
   children: ReactNode;
@@ -57,6 +56,37 @@ export function AppShell({ user, children }: AppShellProps) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [prevPathname, setPrevPathname] = useState(pathname);
+
+  // Fecha o drawer mobile ao navegar para uma nova rota
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
+    setMobileMenuOpen(false);
+  }
+
+  // Fecha o drawer mobile ao pressionar ESC
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [mobileMenuOpen]);
+
+  // Trava a rolagem de fundo no mobile enquanto o drawer estiver aberto
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
 
   const shellClassName = [
     'app-shell',
@@ -129,6 +159,38 @@ export function AppShell({ user, children }: AppShellProps) {
           })}
         </nav>
 
+        {/* Dedicatória com amor para a futura esposa */}
+        <div
+          className="sidebar__tribute"
+          role="region"
+          aria-label="Dedicatória de amor"
+          title={
+            collapsed
+              ? 'Feito com amor para o meu amor gabaritar aê! ❤️ (Clique para expandir)'
+              : undefined
+          }
+          onClick={collapsed ? () => setCollapsed(false) : undefined}
+        >
+          <div className="sidebar__tribute-header">
+            <Heart
+              size={16}
+              className="sidebar__tribute-heart"
+              aria-hidden="true"
+              fill="currentColor"
+            />
+            <span className="sidebar__tribute-tag">Feito com Amor</span>
+          </div>
+          <p className="sidebar__tribute-text">
+            Criado para ajudar minha namorada e futura esposa a alcançar seus objetivos, estudando de
+            forma fácil.
+          </p>
+          <span className="sidebar__tribute-quote">Para o meu amor gabaritar aê! ❤️</span>
+        </div>
+
+        <div className="sidebar__pix-wrap" style={{ padding: '0 var(--space-md)', marginBottom: 'var(--space-sm)' }}>
+          <PixButton variant="sidebar" label="Apoiar com Pix (R$ 19,90)" />
+        </div>
+
         <div className="sidebar__footer">
           <Link
             href="/app/perfil"
@@ -136,7 +198,7 @@ export function AppShell({ user, children }: AppShellProps) {
             className="sidebar__user"
             title={collapsed ? `${user.name} (${user.email})` : undefined}
           >
-            <Avatar name={user.name} />
+            <Avatar name={user.name} image={user.avatarUrl} />
             <span className="sidebar__user-info">
               <span className="sidebar__user-name">{user.name}</span>
               <span className="sidebar__user-email">{user.email}</span>
@@ -147,19 +209,23 @@ export function AppShell({ user, children }: AppShellProps) {
       </aside>
 
       <header className="app-topbar">
-        <button
-          type="button"
-          className="app-topbar__menu-btn"
-          onClick={() => setMobileMenuOpen(true)}
-          aria-label="Abrir menu lateral"
-          aria-expanded={mobileMenuOpen}
-          aria-controls="app-sidebar"
-        >
-          <Menu size={20} aria-hidden="true" />
-        </button>
-        <Logo href="/app" />
-        <span className="app-topbar__name">{firstName(user.name)}</span>
-        <LogoutButton>Sair</LogoutButton>
+        <div className="app-topbar__left">
+          <button
+            type="button"
+            className="app-topbar__menu-btn"
+            onClick={() => setMobileMenuOpen(true)}
+            aria-label="Abrir menu de navegação"
+            aria-expanded={mobileMenuOpen}
+            aria-controls="app-sidebar"
+          >
+            <Menu size={22} aria-hidden="true" />
+          </button>
+          <Logo href="/app" />
+        </div>
+        <div className="row" style={{ alignItems: 'center', gap: 'var(--space-sm)' }}>
+          <PixButton variant="pill" label="Apoiar com Pix" />
+          <UserMenu user={user} showAppDashboardLink={false} />
+        </div>
       </header>
 
       <main id="conteudo" className="app-shell__main">
@@ -187,6 +253,23 @@ export function AppShell({ user, children }: AppShellProps) {
               </li>
             );
           })}
+          <li>
+            <button
+              type="button"
+              className={
+                mobileMenuOpen
+                  ? 'bottom-nav__link bottom-nav__link--active'
+                  : 'bottom-nav__link'
+              }
+              onClick={() => setMobileMenuOpen((prev) => !prev)}
+              aria-label={mobileMenuOpen ? 'Fechar menu lateral' : 'Abrir menu lateral'}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="app-sidebar"
+            >
+              <Menu size={20} aria-hidden="true" />
+              Menu
+            </button>
+          </li>
         </ul>
       </nav>
     </div>

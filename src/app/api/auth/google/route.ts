@@ -6,6 +6,7 @@ import {
   deriveNameFromEmail,
   encodeSession,
   extractSessionUser,
+  getDefaultAvatarUrl,
   isValidEmail,
   sanitizeNextPath,
   sessionCookieOptions,
@@ -96,6 +97,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     id: `google:${email}`,
     name,
     email,
+    avatarUrl: getDefaultAvatarUrl(name, email),
   };
 
   return sessionResponse(user);
@@ -115,6 +117,7 @@ export async function GET(request: Request): Promise<NextResponse> {
     id: `google:${MOCK_GOOGLE_EMAIL}`,
     name: MOCK_GOOGLE_NAME,
     email: MOCK_GOOGLE_EMAIL,
+    avatarUrl: getDefaultAvatarUrl(MOCK_GOOGLE_NAME, MOCK_GOOGLE_EMAIL),
   };
 
   const response = NextResponse.redirect(new URL(nextPath, request.url));

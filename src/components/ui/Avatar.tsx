@@ -1,6 +1,9 @@
+'use client';
+
 interface AvatarProps {
   name: string;
-  size?: 'md' | 'lg';
+  image?: string | null;
+  size?: 'sm' | 'md' | 'lg';
   className?: string;
 }
 
@@ -15,8 +18,8 @@ export function getInitials(name: string): string {
   return `${first}${last}`.toUpperCase();
 }
 
-export function Avatar({ name, size = 'md', className = '' }: AvatarProps) {
-  const sizeClass = size === 'lg' ? 'avatar--lg' : '';
+export function Avatar({ name, image, size = 'md', className = '' }: AvatarProps) {
+  const sizeClass = size === 'lg' ? 'avatar--lg' : size === 'sm' ? 'avatar--sm' : '';
 
   return (
     <span
@@ -25,7 +28,19 @@ export function Avatar({ name, size = 'md', className = '' }: AvatarProps) {
       aria-label={name}
       title={name}
     >
-      {getInitials(name)}
+      {image ? (
+        <img
+          src={image}
+          alt={name}
+          className="avatar__img"
+          loading="lazy"
+          onError={(event) => {
+            // Em caso de falha de rede/carregamento, esconde a imagem e revela as iniciais
+            event.currentTarget.style.display = 'none';
+          }}
+        />
+      ) : null}
+      <span className="avatar__fallback">{getInitials(name)}</span>
     </span>
   );
 }

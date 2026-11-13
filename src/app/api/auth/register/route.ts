@@ -5,6 +5,7 @@ import {
   SESSION_COOKIE,
   encodeSession,
   extractSessionUser,
+  getDefaultAvatarUrl,
   isValidEmail,
   sessionCookieOptions,
 } from '@/lib/auth';
@@ -87,7 +88,12 @@ export async function POST(request: Request): Promise<NextResponse> {
     return registerViaApi({ name, email, password });
   }
 
-  const user: SessionUser = { id: `mock:${email}`, name, email };
+  const user: SessionUser = {
+    id: `mock:${email}`,
+    name,
+    email,
+    avatarUrl: getDefaultAvatarUrl(name, email),
+  };
 
   return sessionResponse(user);
 }

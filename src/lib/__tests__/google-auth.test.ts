@@ -23,11 +23,14 @@ describe('Google Auth API (/api/auth/google)', () => {
     const response = await POST(request);
     expect(response.status).toBe(200);
 
-    const payload = (await response.json()) as { user: { id: string; name: string; email: string } };
+    const payload = (await response.json()) as {
+      user: { id: string; name: string; email: string; avatarUrl?: string };
+    };
     expect(payload.user).toEqual({
       id: 'google:estudante.google@gmail.com',
       name: 'Estudante Google',
       email: 'estudante.google@gmail.com',
+      avatarUrl: expect.any(String),
     });
 
     const cookie = response.cookies.get(SESSION_COOKIE);
@@ -47,11 +50,14 @@ describe('Google Auth API (/api/auth/google)', () => {
     const response = await POST(request);
     expect(response.status).toBe(200);
 
-    const payload = (await response.json()) as { user: { id: string; name: string; email: string } };
+    const payload = (await response.json()) as {
+      user: { id: string; name: string; email: string; avatarUrl?: string };
+    };
     expect(payload.user).toEqual({
       id: 'google:ana.silva@gmail.com',
       name: 'Ana Silva',
       email: 'ana.silva@gmail.com',
+      avatarUrl: expect.any(String),
     });
   });
 

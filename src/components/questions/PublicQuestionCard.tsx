@@ -1,6 +1,8 @@
 /* eslint-disable @next/next/no-img-element -- o dataset traz gráficos SVG em Data URI,
    que o next/image não otimiza. */
 import { Badge } from '@/components/ui/Badge';
+import { MathMarkdown } from '@/components/ui/MathMarkdown';
+import { SmartMediaViewer } from '@/components/ui/SmartMediaViewer';
 import type { Alternative, Question } from '@/domain/types';
 
 const LETTERS = ['A', 'B', 'C', 'D', 'E'] as const;
@@ -31,12 +33,16 @@ export function PublicQuestionCard({ question }: PublicQuestionCardProps) {
         </Badge>
       </div>
 
-      <p className="question-card__statement">{question.title}</p>
+      <div className="question-card__statement">
+        <MathMarkdown content={question.title} />
+      </div>
 
       {question.imageUrl ? (
-        <figure className="question-card__figure">
-          <img src={question.imageUrl} alt={`Ilustração da questão sobre ${question.topic}`} />
-        </figure>
+        <SmartMediaViewer
+          url={question.imageUrl}
+          altText={`Ilustração da questão sobre ${question.topic}`}
+          className="question-card__figure"
+        />
       ) : null}
 
       <ol className="alternatives">
@@ -54,7 +60,9 @@ export function PublicQuestionCard({ question }: PublicQuestionCardProps) {
             <span className="alternative__letter" aria-hidden="true">
               {alternative.letter}
             </span>
-            <span>{alternative.text}</span>
+            <span className="alternative__text">
+              <MathMarkdown content={alternative.text} />
+            </span>
           </li>
         ))}
       </ol>
@@ -65,7 +73,9 @@ export function PublicQuestionCard({ question }: PublicQuestionCardProps) {
         <p className="answer-key">
           Gabarito oficial: <strong>{question.correctAlternative}</strong>
         </p>
-        <p className="answer-explanation">{question.explanation}</p>
+        <div className="answer-explanation">
+          <MathMarkdown content={question.explanation} />
+        </div>
       </details>
     </article>
   );
