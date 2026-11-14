@@ -4508,11 +4508,23 @@ button.bottom-nav__link {
 }
 
 /* Pix Modal */
+.modal-content.pix-modal {
+  max-width: 400px;
+}
+
+.pix-modal .modal-header {
+  padding: var(--space-md) var(--space-lg);
+}
+
+.pix-modal .modal-footer {
+  padding: var(--space-sm) var(--space-lg);
+}
+
 .pix-body {
-  padding: var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  gap: var(--space-sm);
 }
 
 .pix-loading {
@@ -4526,9 +4538,9 @@ button.bottom-nav__link {
 
 .pix-qr-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: var(--space-lg);
-  flex-wrap: wrap;
+  gap: var(--space-sm);
   justify-content: center;
   background: var(--subtle);
   padding: var(--space-md);
@@ -4540,16 +4552,16 @@ button.bottom-nav__link {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-sm);
+  gap: 4px;
+  padding: var(--space-xs);
   background: #ffffff;
   border-radius: var(--radius-md);
   border: 1px solid var(--border);
 }
 
 .pix-qr-img {
-  width: 180px;
-  height: 180px;
+  width: 164px;
+  height: 164px;
   display: block;
 }
 
@@ -4557,7 +4569,7 @@ button.bottom-nav__link {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
   color: var(--azul-ink);
 }
@@ -4565,12 +4577,19 @@ button.bottom-nav__link {
 .pix-meta-card {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  font-size: 0.9rem;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.85rem;
+  text-align: center;
+  width: 100%;
+  padding-top: var(--space-xs);
+  border-top: 1px dashed var(--border);
 }
 
 .pix-meta-row {
   display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 6px;
 }
 
@@ -4613,12 +4632,15 @@ button.bottom-nav__link {
 
 .pix-textarea {
   width: 100%;
-  padding: 8px 12px;
+  min-height: 88px;
+  padding: 10px 12px;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--ground);
   font-family: monospace;
   font-size: 0.8rem;
+  line-height: 1.45;
+  word-break: break-all;
   resize: none;
 }
 

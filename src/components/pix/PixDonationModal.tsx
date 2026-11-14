@@ -148,7 +148,7 @@ export function PixDonationModal({
                 <div className="pix-meta-row">
                   <span className="pix-meta-label">Valor:</span>
                   <strong className="pix-meta-val text-primary">
-                    Livre (você escolhe no seu banco)
+                    Livre (você escolhe no banco)
                   </strong>
                 </div>
               </div>
@@ -194,7 +194,7 @@ export function PixDonationModal({
               </label>
               <textarea
                 readOnly
-                rows={3}
+                rows={4}
                 value={pixData.pixCopiaECola}
                 className="pix-textarea"
                 aria-label="Código Pix Copia e Cola"

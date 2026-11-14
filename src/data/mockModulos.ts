@@ -5,9 +5,9 @@ export const OFFICIAL_PIX_FALLBACK: PixInfo = {
   keyType: 'Aleatória (EVP)',
   merchantName: 'Raul Danielli',
   merchantCity: 'Brasília - DF',
-  txId: 'APOIOENEM',
+  txId: '***',
   pixCopiaECola:
-    '00020126580014BR.GOV.BCB.PIX0136d0bbcb4c-83bf-4687-b928-891febf512145204000053039865802BR5913Raul Danielli6008BRASILIA62130509APOIOENEM6304237F',
+    '00020126580014br.gov.bcb.pix0136d0bbcb4c-83bf-4687-b928-891febf512145204000053039865802BR5921RAUL TAVARES DANIELLI60085500020762070503***63047FD9',
 };
 
 export const MOCK_MODULOS_DIDATICOS: ModuloDidatico[] = [
