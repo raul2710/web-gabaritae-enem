@@ -101,5 +101,5 @@ export const BOOKLET_COLORS: Record<BookletColor, BookletColorMeta> = {
 };
 
 /** Chave Pix oficial (chave aleatória EVP) usada no modal de apoio ao projeto. */
-export const PIX_RANDOM_KEY = 'c639b424-9644-47c5-a6e0-47e8894de02e';
+export const PIX_RANDOM_KEY = 'd0bbcb4c-83bf-4687-b928-891febf51214';
 export const PIX_KEY_COPIA_E_COLA = PIX_RANDOM_KEY;

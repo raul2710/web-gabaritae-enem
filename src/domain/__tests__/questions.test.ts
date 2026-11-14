@@ -6,7 +6,7 @@ import { PIX_KEY_COPIA_E_COLA } from '@/domain/constants';
 
 describe('Chave Pix', () => {
   it('corresponde exatamente à chave aleatória oficial do projeto', () => {
-    expect(PIX_KEY_COPIA_E_COLA).toBe('c639b424-9644-47c5-a6e0-47e8894de02e');
+    expect(PIX_KEY_COPIA_E_COLA).toBe('d0bbcb4c-83bf-4687-b928-891febf51214');
   });
 });
 

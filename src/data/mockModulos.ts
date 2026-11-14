@@ -1,14 +1,14 @@
 import type { ModuloDidatico, PixInfo } from '@/domain/types';
 
 export const OFFICIAL_PIX_FALLBACK: PixInfo = {
-  pixKey: 'apoio@gabaritae.com.br',
-  keyType: 'E-mail',
+  pixKey: 'd0bbcb4c-83bf-4687-b928-891febf51214',
+  keyType: 'Aleatória (EVP)',
   merchantName: 'Gabaritaê ENEM Educação',
   merchantCity: 'Brasília - DF',
   amount: 19.90,
   txId: 'APOIOENEM',
   pixCopiaECola:
-    '00020126580014BR.GOV.BCB.PIX0136apoio@gabaritae.com.br520400005303986540519.905802BR5924Gabaritae ENEM Educacao6008BRASILIA62130509APOIOENEM6304ABCD',
+    '00020126580014BR.GOV.BCB.PIX0136d0bbcb4c-83bf-4687-b928-891febf51214520400005303986540519.905802BR5923Gabaritae ENEM Educacao6008BRASILIA62130509APOIOENEM6304AC1C',
 };
 
 export const MOCK_MODULOS_DIDATICOS: ModuloDidatico[] = [
