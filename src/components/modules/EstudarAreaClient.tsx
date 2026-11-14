@@ -20,6 +20,7 @@ import {
 import { AdminCuradoriaModal } from '@/components/admin/AdminCuradoriaModal';
 import { OfflinePackManager } from '@/components/offline/OfflinePackManager';
 import { Badge } from '@/components/ui/Badge';
+import { CustomSelect } from '@/components/ui/CustomSelect';
 import { MathMarkdown } from '@/components/ui/MathMarkdown';
 import { SmartMediaViewer } from '@/components/ui/SmartMediaViewer';
 import type { DisciplineMeta } from '@/domain/constants';
@@ -109,16 +110,19 @@ export function EstudarAreaClient({
               <Filter size={14} />
               Filtrar por Recorrência TRI:
             </span>
-            {['Todas', 'Alta', 'Média', 'Baixa'].map((rec) => (
-              <button
-                key={rec}
-                type="button"
-                className={`filter-pill ${recorrenciaFilter === rec ? 'is-active' : ''}`}
-                onClick={() => setRecorrenciaFilter(rec)}
-              >
-                {rec}
-              </button>
-            ))}
+            <div style={{ minWidth: 220 }}>
+              <CustomSelect
+                value={recorrenciaFilter}
+                onChange={(val) => setRecorrenciaFilter(val)}
+                ariaLabel="Filtrar módulos por recorrência TRI"
+                options={[
+                  { value: 'Todas', label: 'Todas as recorrências', badge: `${modulosList.length}` },
+                  { value: 'Alta', label: 'Alta Recorrência', accentColor: '#2e7d32', badge: 'Prioridade' },
+                  { value: 'Média', label: 'Média Recorrência', accentColor: '#d99b26' },
+                  { value: 'Baixa', label: 'Baixa Recorrência', accentColor: '#6e6e6a' },
+                ]}
+              />
+            </div>
           </div>
 
           {filteredModulos.length === 0 ? (

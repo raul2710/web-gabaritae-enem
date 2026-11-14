@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useSyncExternalStore } from 'react';
 import {
   CheckCircle2,
   CloudOff,
@@ -29,27 +29,37 @@ interface OfflinePackManagerProps {
   discipline?: DisciplineId;
 }
 
+function subscribeToOnlineStatus(callback: () => void): () => void {
+  window.addEventListener('online', callback);
+  window.addEventListener('offline', callback);
+
+  return () => {
+    window.removeEventListener('online', callback);
+    window.removeEventListener('offline', callback);
+  };
+}
+
+function getOnlineSnapshot(): boolean {
+  return typeof navigator !== 'undefined' ? navigator.onLine : true;
+}
+
+function getServerOnlineSnapshot(): boolean {
+  return true;
+}
+
 export function OfflinePackManager({ className = '', discipline }: OfflinePackManagerProps) {
-  const [isOnline, setIsOnline] = useState<boolean>(true);
+  const isOnline = useSyncExternalStore(
+    subscribeToOnlineStatus,
+    getOnlineSnapshot,
+    getServerOnlineSnapshot,
+  );
   const [loadingDiscipline, setLoadingDiscipline] = useState<string | null>(null);
   const [meta, setMeta] = useState<OfflineMeta>({ lastUpdated: '', disciplinesDownloaded: {} });
   const [feedback, setFeedback] = useState<string | null>(null);
 
   useEffect(() => {
-    setIsOnline(typeof navigator !== 'undefined' ? navigator.onLine : true);
-
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- lê o cache local (localStorage) após a montagem; derivar no render causaria mismatch de SSR.
     setMeta(getOfflineMeta());
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
   }, []);
 
   const handleDownload = async (disc: DisciplineId) => {

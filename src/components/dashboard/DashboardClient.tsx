@@ -9,6 +9,7 @@ import { Card } from '@/components/ui/Card';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { SectionHeader } from '@/components/ui/SectionHeader';
+import { EnemCountdownBanner } from '@/components/dashboard/EnemCountdownBanner';
 import { StudyGoalCard } from '@/components/dashboard/StudyGoalCard';
 import { questions as catalogQuestions } from '@/data/catalog';
 import { ENEM_DISCIPLINES } from '@/domain/constants';
@@ -136,6 +137,8 @@ export function DashboardClient({ user }: DashboardClientProps) {
         <DashboardSkeleton />
       ) : (
         <>
+          <EnemCountdownBanner userId={user.id} />
+
           <StudyGoalCard userId={user.id} />
 
           <div className="kpi-grid">

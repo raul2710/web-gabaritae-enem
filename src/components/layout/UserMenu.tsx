@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ChevronDown, LayoutDashboard, LogOut, User as UserIcon } from 'lucide-react';
+import { ChevronDown, Info, LayoutDashboard, LogOut, NotebookPen, User as UserIcon } from 'lucide-react';
 
 import { Avatar } from '@/components/ui/Avatar';
 import type { SessionUser } from '@/domain/types';
@@ -62,7 +62,7 @@ export function UserMenu({ user, showAppDashboardLink = true }: UserMenuProps) {
     <div className="user-menu" ref={menuRef}>
       <button
         type="button"
-        className="user-menu__trigger"
+        className={open ? 'user-menu__trigger user-menu__trigger--open' : 'user-menu__trigger'}
         onClick={() => setOpen((prev) => !prev)}
         aria-expanded={open}
         aria-haspopup="true"
@@ -70,7 +70,11 @@ export function UserMenu({ user, showAppDashboardLink = true }: UserMenuProps) {
       >
         <Avatar name={user.name} image={user.avatarUrl} size="sm" />
         <span className="user-menu__name">{user.name}</span>
-        <ChevronDown size={14} className="user-menu__chevron" aria-hidden="true" />
+        <ChevronDown
+          size={14}
+          className={open ? 'user-menu__chevron user-menu__chevron--open' : 'user-menu__chevron'}
+          aria-hidden="true"
+        />
       </button>
 
       {open ? (
@@ -99,6 +103,16 @@ export function UserMenu({ user, showAppDashboardLink = true }: UserMenuProps) {
             ) : null}
 
             <Link
+              href="/app/resumos"
+              className="user-menu__item"
+              role="menuitem"
+              onClick={() => setOpen(false)}
+            >
+              <NotebookPen size={16} aria-hidden="true" />
+              <span>Meus resumos</span>
+            </Link>
+
+            <Link
               href="/app/perfil"
               className="user-menu__item"
               role="menuitem"
@@ -106,6 +120,16 @@ export function UserMenu({ user, showAppDashboardLink = true }: UserMenuProps) {
             >
               <UserIcon size={16} aria-hidden="true" />
               <span>Meu perfil</span>
+            </Link>
+
+            <Link
+              href="/app/info"
+              className="user-menu__item"
+              role="menuitem"
+              onClick={() => setOpen(false)}
+            >
+              <Info size={16} aria-hidden="true" />
+              <span>Info & Apoie</span>
             </Link>
           </nav>
 

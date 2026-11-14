@@ -3,12 +3,11 @@ import type { ModuloDidatico, PixInfo } from '@/domain/types';
 export const OFFICIAL_PIX_FALLBACK: PixInfo = {
   pixKey: 'd0bbcb4c-83bf-4687-b928-891febf51214',
   keyType: 'Aleatória (EVP)',
-  merchantName: 'Gabaritaê ENEM Educação',
+  merchantName: 'Raul Tavares',
   merchantCity: 'Brasília - DF',
-  amount: 19.90,
   txId: 'APOIOENEM',
   pixCopiaECola:
-    '00020126580014BR.GOV.BCB.PIX0136d0bbcb4c-83bf-4687-b928-891febf51214520400005303986540519.905802BR5923Gabaritae ENEM Educacao6008BRASILIA62130509APOIOENEM6304AC1C',
+    '00020126580014BR.GOV.BCB.PIX0136d0bbcb4c-83bf-4687-b928-891febf512145204000053039865802BR5912Raul Tavares6008BRASILIA62130509APOIOENEM6304206B',
 };
 
 export const MOCK_MODULOS_DIDATICOS: ModuloDidatico[] = [

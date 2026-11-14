@@ -4,10 +4,11 @@ import {
   BookOpen,
   CalendarCheck,
   ClipboardList,
-  Heart,
   Home,
+  Info,
   type LucideIcon,
   Menu,
+  NotebookPen,
   PanelLeftClose,
   PanelLeftOpen,
   User,
@@ -19,7 +20,6 @@ import { useEffect, useState, type ReactNode } from 'react';
 
 import { LogoutButton } from './LogoutButton';
 import { UserMenu } from './UserMenu';
-import { PixButton } from '@/components/pix/PixButton';
 import { Avatar } from '@/components/ui/Avatar';
 import { Logo } from '@/components/ui/Logo';
 import type { SessionUser } from '@/domain/types';
@@ -34,12 +34,16 @@ const NAV_ITEMS: NavItem[] = [
   { href: '/app', label: 'Início', icon: Home },
   { href: '/app/provas', label: 'Provas', icon: ClipboardList },
   { href: '/app/estudar', label: 'Estudar', icon: BookOpen },
+  { href: '/app/resumos', label: 'Resumos', icon: NotebookPen },
   { href: '/app/simulados', label: 'Simulados', icon: CalendarCheck },
   { href: '/app/perfil', label: 'Perfil', icon: User },
+  { href: '/app/info', label: 'Info', icon: Info },
 ];
 
-/** Bottom nav no mobile: 4 destinos principais. */
-const BOTTOM_NAV_ITEMS = NAV_ITEMS.filter((item) => item.href !== '/app/simulados');
+/** Bottom nav no mobile: destinos principais. */
+const BOTTOM_NAV_ITEMS = NAV_ITEMS.filter(
+  (item) => item.href !== '/app/simulados' && item.href !== '/app/info',
+);
 
 /** Exato para `/app`; por prefixo para as demais rotas. */
 function isActivePath(pathname: string, href: string): boolean {
@@ -112,7 +116,7 @@ export function AppShell({ user, children }: AppShellProps) {
         aria-label="Navegação da área do aluno"
       >
         <div className="sidebar__header">
-          <Logo href="/app" compact={collapsed} />
+          <Logo href="/" compact={collapsed} />
 
           <button
             type="button"
@@ -159,39 +163,7 @@ export function AppShell({ user, children }: AppShellProps) {
           })}
         </nav>
 
-        {/* Dedicatória com amor para a futura esposa */}
-        <div
-          className="sidebar__tribute"
-          role="region"
-          aria-label="Dedicatória de amor"
-          title={
-            collapsed
-              ? 'Feito com amor para o meu amor gabaritar aê! ❤️ (Clique para expandir)'
-              : undefined
-          }
-          onClick={collapsed ? () => setCollapsed(false) : undefined}
-        >
-          <div className="sidebar__tribute-header">
-            <Heart
-              size={16}
-              className="sidebar__tribute-heart"
-              aria-hidden="true"
-              fill="currentColor"
-            />
-            <span className="sidebar__tribute-tag">Feito com Amor</span>
-          </div>
-          <p className="sidebar__tribute-text">
-            Criado para ajudar minha namorada e futura esposa a alcançar seus objetivos, estudando de
-            forma fácil.
-          </p>
-          <span className="sidebar__tribute-quote">Para o meu amor gabaritar aê! ❤️</span>
-        </div>
-
-        <div className="sidebar__pix-wrap" style={{ padding: '0 var(--space-md)', marginBottom: 'var(--space-sm)' }}>
-          <PixButton variant="sidebar" label="Apoiar com Pix (R$ 19,90)" />
-        </div>
-
-        <div className="sidebar__footer">
+        <div className="sidebar__footer" style={{ marginTop: 'auto' }}>
           <Link
             href="/app/perfil"
             onClick={() => setMobileMenuOpen(false)}
@@ -220,10 +192,9 @@ export function AppShell({ user, children }: AppShellProps) {
           >
             <Menu size={22} aria-hidden="true" />
           </button>
-          <Logo href="/app" />
+          <Logo href="/" />
         </div>
         <div className="row" style={{ alignItems: 'center', gap: 'var(--space-sm)' }}>
-          <PixButton variant="pill" label="Apoiar com Pix" />
           <UserMenu user={user} showAppDashboardLink={false} />
         </div>
       </header>

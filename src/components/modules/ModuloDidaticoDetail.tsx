@@ -11,7 +11,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 
-import { Badge } from '@/components/ui/Badge';
+import { Badge, type BadgeTone } from '@/components/ui/Badge';
 import { MathMarkdown } from '@/components/ui/MathMarkdown';
 import { SmartMediaViewer } from '@/components/ui/SmartMediaViewer';
 import type { ModuloDidatico } from '@/domain/types';
@@ -31,7 +31,7 @@ export function ModuloDidaticoDetail({
 }: ModuloDidaticoDetailProps) {
   const [showJsonRaw, setShowJsonRaw] = useState(false);
 
-  const recurrenceTone =
+  const recurrenceTone: BadgeTone =
     modulo.recorrencia === 'Alta'
       ? 'negative'
       : modulo.recorrencia === 'Média'
@@ -45,7 +45,7 @@ export function ModuloDidaticoDetail({
         <div className="modulo-top-row">
           <Badge tone="primary">{modulo.area}</Badge>
           <Badge>{modulo.disciplina}</Badge>
-          <Badge tone={recurrenceTone as any}>
+          <Badge tone={recurrenceTone}>
             <Flame size={12} aria-hidden="true" />
             Recorrência {modulo.recorrencia} no ENEM
           </Badge>

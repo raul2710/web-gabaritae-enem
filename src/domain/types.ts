@@ -214,7 +214,7 @@ export interface StudyStats {
   dailyGoalRate: number;
 }
 
-/** Objetivo do aluno para o ENEM (curso/foco, universidade e nota de corte alvo). */
+/** Objetivo do aluno para o ENEM (curso/foco, universidade, nota de corte alvo e data da prova). */
 export interface StudyGoal {
   /** Curso ou área de foco (ex.: Medicina, Engenharia de Software, Direito). */
   focusCourse: string;
@@ -222,6 +222,26 @@ export interface StudyGoal {
   targetUniversity: string;
   /** Nota alvo no ENEM (escala TRI: 400 a 1000). */
   targetScore: number;
+  /** Data personalizada do 1º dia de prova do ENEM (YYYY-MM-DD), opcional. */
+  examDate?: string;
   /** ISO 8601 da última atualização. */
+  updatedAt: string;
+}
+
+/** Categorias de resumos e anotações do aluno (4 áreas do ENEM + Redação e Geral). */
+export type StudyNoteDiscipline = DisciplineId | 'redacao' | 'geral';
+
+/** Anotação/resumo salvo pelo aluno na aba de Resumos. */
+export interface StudyNote {
+  id: string;
+  title: string;
+  discipline: StudyNoteDiscipline;
+  subject: string;
+  content: string;
+  keyPoints: string[];
+  pinned: boolean;
+  /** ID opcional da apostila de origem, quando salvo a partir de "Estudar" ou "Raio-X Visual". */
+  sourceModuleId?: string;
+  createdAt: string;
   updatedAt: string;
 }

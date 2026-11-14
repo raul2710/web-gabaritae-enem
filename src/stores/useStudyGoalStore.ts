@@ -11,6 +11,7 @@ interface StudyGoalState {
     userId: string,
     goal: Omit<StudyGoal, 'updatedAt'> & { updatedAt?: string },
   ) => void;
+  setExamDate: (userId: string, examDate: string | undefined) => void;
   getGoal: (userId: string) => StudyGoal | undefined;
   clearGoal: (userId: string) => void;
 }
@@ -28,10 +29,28 @@ export const useStudyGoalStore = create<StudyGoalState>()(
               focusCourse: goal.focusCourse.trim(),
               targetUniversity: goal.targetUniversity.trim(),
               targetScore: Math.min(1000, Math.max(300, Math.round(Number(goal.targetScore) || 700))),
+              examDate: goal.examDate?.trim() || state.byUser[userId]?.examDate,
               updatedAt: goal.updatedAt ?? new Date().toISOString(),
             },
           },
         })),
+
+      setExamDate: (userId, examDate) =>
+        set((state) => {
+          const existing = state.byUser[userId];
+          return {
+            byUser: {
+              ...state.byUser,
+              [userId]: {
+                focusCourse: existing?.focusCourse ?? 'Meu Foco ENEM',
+                targetUniversity: existing?.targetUniversity ?? 'SISU',
+                targetScore: existing?.targetScore ?? 750,
+                examDate: examDate?.trim() || undefined,
+                updatedAt: new Date().toISOString(),
+              },
+            },
+          };
+        }),
 
       getGoal: (userId) => get().byUser[userId],
 

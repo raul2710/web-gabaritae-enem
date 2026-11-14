@@ -103,10 +103,10 @@ describe('Gabaritaê ENEM API Client & Offline Storage', () => {
     });
 
     it('fetchPix recupera dados oficiais BACEN com fallback e QR Code copia e cola', async () => {
-      const pix = await fetchPix(19.9, 'APOIOENEM');
+      const pix = await fetchPix('APOIOENEM');
       expect(pix.pixKey).toBeDefined();
       expect(pix.pixCopiaECola).toContain('BR.GOV.BCB.PIX');
-      expect(pix.merchantName).toBe('Gabaritaê ENEM Educação');
+      expect(pix.merchantName).toBe('Raul Tavares');
     });
   });
 });

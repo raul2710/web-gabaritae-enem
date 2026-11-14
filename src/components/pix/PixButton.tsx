@@ -45,7 +45,7 @@ export function PixButton({
           type="button"
           className={`pix-pill-btn ${className}`}
           onClick={() => setIsOpen(true)}
-          title="Chave Pix Oficial Gabaritaê ENEM"
+          title="Apoiar via Pix"
         >
           <QrCode size={14} />
           <span>{label}</span>

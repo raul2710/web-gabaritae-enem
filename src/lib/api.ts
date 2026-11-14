@@ -480,7 +480,7 @@ export async function getExamQuestions(examId: string): Promise<Question[]> {
 }
 
 // =========================================================================
-// D. MODO OFFLINE E CHAVE PIX OFICIAL (BR CODE BACEN)
+// D. MODO OFFLINE E CHAVE PIX (BR CODE)
 // =========================================================================
 
 /**
@@ -531,22 +531,20 @@ export async function fetchOfflinePack(discipline: DisciplineId): Promise<Offlin
 }
 
 /**
- * Obtém a chave Pix oficial do Gabaritaê ENEM com QR Code Copia e Cola BACEN.
+ * Obtém a chave Pix de Raul Tavares com QR Code Copia e Cola (valor livre).
  */
-export async function fetchPix(amount = 19.9, txId = 'APOIOENEM'): Promise<PixInfo> {
-  const data = await fetchJson<PixInfo>(`/pix?amount=${amount.toFixed(2)}&txId=${encodeURIComponent(txId)}`);
+export async function fetchPix(txId = 'APOIOENEM'): Promise<PixInfo> {
+  const data = await fetchJson<PixInfo>(`/pix?txId=${encodeURIComponent(txId)}`);
 
   if (data && data.pixKey && data.pixCopiaECola) {
+    const cleanData: PixInfo = {
+      ...data,
+      amount: undefined,
+    };
     if (typeof window !== 'undefined') {
-      saveOfflinePix(data);
+      saveOfflinePix(cleanData);
     }
-    return data;
-  }
-
-  // Fallback offline salvo
-  if (typeof window !== 'undefined') {
-    const cachedPix = getOfflinePix();
-    if (cachedPix) return cachedPix;
+    return cleanData;
   }
 
   return OFFICIAL_PIX_FALLBACK;

@@ -25,7 +25,7 @@ export async function PublicHeader() {
   return (
     <header className="public-header">
       <div className="container public-header__inner">
-        <Logo href={user ? '/app' : '/'} />
+        <Logo href="/" />
 
         <nav className="public-nav" aria-label="Navegação principal">
           {navLinks.map((link) => (

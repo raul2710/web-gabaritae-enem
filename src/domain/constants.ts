@@ -1,4 +1,4 @@
-import type { BookletColor, DisciplineId } from './types';
+import type { BookletColor, DisciplineId, StudyNoteDiscipline } from './types';
 
 export interface DisciplineMeta {
   id: DisciplineId;
@@ -103,3 +103,33 @@ export const BOOKLET_COLORS: Record<BookletColor, BookletColorMeta> = {
 /** Chave Pix oficial (chave aleatória EVP) usada no modal de apoio ao projeto. */
 export const PIX_RANDOM_KEY = 'd0bbcb4c-83bf-4687-b928-891febf51214';
 export const PIX_KEY_COPIA_E_COLA = PIX_RANDOM_KEY;
+
+/** Janela de alerta da contagem regressiva (1 mês = 31 dias antes do ENEM). */
+export const ENEM_COUNTDOWN_WINDOW_DAYS = 31;
+
+/** Categorias disponíveis na aba de Resumos do aluno. */
+export const NOTE_CATEGORIES: Array<{
+  id: StudyNoteDiscipline;
+  name: string;
+  accent: string;
+  tint: string;
+}> = [
+  ...ENEM_DISCIPLINES.map((d) => ({
+    id: d.id as StudyNoteDiscipline,
+    name: d.name,
+    accent: d.accent,
+    tint: d.tint,
+  })),
+  {
+    id: 'redacao',
+    name: 'Redação',
+    accent: '#6B21A8',
+    tint: '#F3E8FF',
+  },
+  {
+    id: 'geral',
+    name: 'Geral / Revisão',
+    accent: '#374151',
+    tint: '#F3F4F6',
+  },
+];

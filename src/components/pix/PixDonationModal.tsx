@@ -19,31 +19,26 @@ import { fetchPix } from '@/lib/api';
 interface PixDonationModalProps {
   isOpen: boolean;
   onClose: () => void;
-  defaultAmount?: number;
 }
 
 export function PixDonationModal({
   isOpen,
   onClose,
-  defaultAmount = 19.9,
 }: PixDonationModalProps) {
   const [pixData, setPixData] = useState<PixInfo | null>(null);
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>('');
-  const [loading, setLoading] = useState(true);
   const [copiedKey, setCopiedKey] = useState(false);
   const [copiedCopiaECola, setCopiedCopiaECola] = useState(false);
-  const [amount, setAmount] = useState<number>(defaultAmount);
+  const loading = isOpen && pixData === null;
 
   useEffect(() => {
     if (!isOpen) return;
 
     let isMounted = true;
-    setLoading(true);
 
-    fetchPix(amount, 'APOIOENEM')
+    fetchPix('APOIOENEM')
       .then(async (data) => {
         if (!isMounted) return;
-        setPixData(data);
 
         // Gera o QR Code visual a partir do código Pix Copia e Cola
         if (data.pixCopiaECola) {
@@ -61,15 +56,14 @@ export function PixDonationModal({
             console.error('Erro ao gerar QRCode:', err);
           }
         }
-      })
-      .finally(() => {
-        if (isMounted) setLoading(false);
+
+        if (isMounted) setPixData(data);
       });
 
     return () => {
       isMounted = false;
     };
-  }, [isOpen, amount]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -102,13 +96,13 @@ export function PixDonationModal({
           <div className="modal-header-info">
             <span className="badge badge--primary">
               <Heart size={14} className="text-negative fill-current" aria-hidden="true" />
-              Apoie o Projeto Gabaritaê ENEM
+              Apoio via Pix
             </span>
             <h2 id="pix-modal-title" className="modal-title">
-              Chave Pix Oficial (BR Code BACEN)
+              Pix de Raul Tavares
             </h2>
             <p className="modal-subtitle">
-              Sua contribuição mantém os servidores rápidos e o acervo público do ENEM 100% gratuito.
+              O valor cai direto na conta de Raul Tavares.
             </p>
           </div>
           <button
@@ -124,7 +118,7 @@ export function PixDonationModal({
         {loading ? (
           <div className="pix-loading">
             <Loader2 size={32} className="spinner" />
-            <p>Gerando cobrança instantânea BACEN...</p>
+            <p>Gerando o QR Code Pix...</p>
           </div>
         ) : pixData ? (
           <div className="pix-body">
@@ -135,34 +129,26 @@ export function PixDonationModal({
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={qrCodeDataUrl}
-                    alt="QR Code Pix Oficial do Gabaritaê ENEM"
+                    alt="QR Code Pix de Raul Tavares"
                     className="pix-qr-img"
                   />
                   <div className="pix-qr-stamp">
                     <ShieldCheck size={14} />
-                    <span>Pix Oficial Banco Central</span>
+                    <span>Pix</span>
                   </div>
                 </div>
               ) : null}
 
-              {/* Informações Oficiais */}
+              {/* Dados do recebedor */}
               <div className="pix-meta-card">
                 <div className="pix-meta-row">
-                  <span className="pix-meta-label">Beneficiário:</span>
+                  <span className="pix-meta-label">Recebedor:</span>
                   <strong className="pix-meta-val">{pixData.merchantName}</strong>
                 </div>
                 <div className="pix-meta-row">
-                  <span className="pix-meta-label">Cidade:</span>
-                  <span className="pix-meta-val">{pixData.merchantCity}</span>
-                </div>
-                <div className="pix-meta-row">
-                  <span className="pix-meta-label">Identificador (TxID):</span>
-                  <code className="pix-meta-val">{pixData.txId}</code>
-                </div>
-                <div className="pix-meta-row">
-                  <span className="pix-meta-label">Valor sugerido:</span>
+                  <span className="pix-meta-label">Valor:</span>
                   <strong className="pix-meta-val text-primary">
-                    R$ {(pixData.amount ?? amount).toFixed(2).replace('.', ',')}
+                    Livre (você escolhe no seu banco)
                   </strong>
                 </div>
               </div>
@@ -171,7 +157,7 @@ export function PixDonationModal({
             {/* Chave Pix Direta */}
             <div className="pix-key-section">
               <label className="pix-section-label">
-                Chave Pix Direta ({pixData.keyType}):
+                Chave Pix:
               </label>
               <div className="pix-copy-input-group">
                 <input
@@ -204,7 +190,7 @@ export function PixDonationModal({
             {/* Código Pix Copia e Cola */}
             <div className="pix-code-section">
               <label className="pix-section-label">
-                Código Pix Copia e Cola (Payload BACEN):
+                Código Pix Copia e Cola:
               </label>
               <textarea
                 readOnly
