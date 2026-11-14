@@ -48,7 +48,7 @@ export function PublicFooter() {
 
           <div className="public-footer__col">
             <span className="public-footer__title">Apoie via Pix</span>
-            <span className="meta">Pix de Raul Tavares (copia e cola):</span>
+            <span className="meta">Pix de Raul Danielli (copia e cola):</span>
             <code className="meta" style={{ wordBreak: 'break-all' }}>
               {PIX_KEY_COPIA_E_COLA}
             </code>

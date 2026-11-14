@@ -99,10 +99,10 @@ export function PixDonationModal({
               Apoio via Pix
             </span>
             <h2 id="pix-modal-title" className="modal-title">
-              Pix de Raul Tavares
+              Pix de Raul Danielli
             </h2>
             <p className="modal-subtitle">
-              O valor cai direto na conta de Raul Tavares.
+              O valor cai direto na conta de Raul Danielli.
             </p>
           </div>
           <button
@@ -129,7 +129,7 @@ export function PixDonationModal({
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={qrCodeDataUrl}
-                    alt="QR Code Pix de Raul Tavares"
+                    alt="QR Code Pix de Raul Danielli"
                     className="pix-qr-img"
                   />
                   <div className="pix-qr-stamp">

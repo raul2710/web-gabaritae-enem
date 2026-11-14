@@ -531,21 +531,9 @@ export async function fetchOfflinePack(discipline: DisciplineId): Promise<Offlin
 }
 
 /**
- * Obtém a chave Pix de Raul Tavares com QR Code Copia e Cola (valor livre).
+ * Obtém a chave Pix de Raul Danielli com QR Code Copia e Cola (valor livre).
  */
 export async function fetchPix(txId = 'APOIOENEM'): Promise<PixInfo> {
-  const data = await fetchJson<PixInfo>(`/pix?txId=${encodeURIComponent(txId)}`);
-
-  if (data && data.pixKey && data.pixCopiaECola) {
-    const cleanData: PixInfo = {
-      ...data,
-      amount: undefined,
-    };
-    if (typeof window !== 'undefined') {
-      saveOfflinePix(cleanData);
-    }
-    return cleanData;
-  }
-
+  void txId;
   return OFFICIAL_PIX_FALLBACK;
 }
