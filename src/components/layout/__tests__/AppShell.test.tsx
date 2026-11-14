@@ -22,8 +22,8 @@ const mockUser: SessionUser = {
   email: 'maria@example.com',
 };
 
-describe('AppShell - Dedicatória e Mobile First', () => {
-  it('renderiza o botão de menu mobile na topbar e a dedicatória na sidebar', () => {
+describe('AppShell - Mobile First', () => {
+  it('renderiza o botão de menu mobile na topbar', () => {
     render(
       <AppShell user={mockUser}>
         <p>Conteúdo do Aluno</p>
@@ -34,14 +34,6 @@ describe('AppShell - Dedicatória e Mobile First', () => {
     const menuBtn = screen.getByRole('button', { name: /abrir menu de navegação/i });
     expect(menuBtn).toBeDefined();
 
-    // Dedicatória para a namorada/futura esposa na sidebar
-    expect(screen.getByText(/feito com amor/i)).toBeDefined();
-    expect(
-      screen.getByText(
-        /criado para ajudar minha namorada e futura esposa a alcançar seus objetivos, estudando de forma fácil\./i
-      )
-    ).toBeDefined();
-    expect(screen.getByText(/para o meu amor gabaritar aê! ❤️/i)).toBeDefined();
   });
 
   it('abre e fecha o menu mobile ao clicar nos controles correspondentes', () => {

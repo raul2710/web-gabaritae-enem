@@ -79,8 +79,10 @@ export function EnemDatePicker({
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect -- sincroniza a visão do calendário com a data selecionada (estado derivado de prop). */
     setViewYear(selectedDate.getFullYear());
     setViewMonth(selectedDate.getMonth());
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [selectedDate]);
 
   useEffect(() => {
